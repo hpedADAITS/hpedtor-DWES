@@ -5,4 +5,3 @@ function invertirClaveValor(obj) {
   }
   return nuevoObj;
 }
-

@@ -4,4 +4,3 @@ function NotaTop(alumnos) {
     topNote: Math.max(...notes)
   }));
 }
-
