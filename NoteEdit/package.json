@@ -1,11 +1,14 @@
 {
   "name": "note-edit",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
-  "description": "Basic CLI editing of documents using JS lol",
+  "description": "Basic CLI editing of documents using JS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.cjs",
+    "leer": "node index.cjs --read",
+    "crear": "node index.cjs --create"
   },
   "keywords": [
     "CLI"

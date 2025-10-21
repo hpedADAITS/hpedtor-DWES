@@ -1,18 +1,44 @@
 const fs = require("fs");
+const args = require("process").argv;
 const readline = require("readline");
 const path = require("path");
 const chalk = require("chalk");
+const NOTES_DIR = path.join(__dirname, "notes");
+
+if(!fs.existsSync(NOTES_DIR)) {
+  fs.mkdirSync(NOTES_DIR);
+}
+
+if (args.includes("--create")) {
+  const noteName = args[args.indexOf("--create") + 1];
+  if (!noteName) {
+    console.log(chalk.red("--create OPTS: \"--create <note_name>, <NOTE_PATH>\""));
+    process.exit(1);
+    crearNota();
+  }
+
+if (args.includes("--read")) {
+  const noteName = args[args.indexOf("--read") + 1];
+  if (!noteName) {
+    console.log(chalk.red("--read OPTS: \"--read <note_name>, <NOTE_PATH>\""));
+    process.exit(1);
+  }
+  leerNota(args[args.indexOf("--read") + 1]);
+  const filePath = path.join(NOTES_DIR, `${noteName}.note`);
+  if (!fs.existsSync(filePath)) {
+    console.log(chalk.red("Nota no encontrada."));
+    process.exit(1);
+  }
+
+  const content = fs.readFileSync(filePath, "utf-8");
+  console.log(content);
+  process.exit(0);
+};
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
-
-const NOTES_DIR = "./notes";
-
-if (!fs.existsSync(NOTES_DIR)) {
-  fs.mkdirSync(NOTES_DIR);
-}
 
 function showMenu() {
   console.log(chalk.blue("MENU:"));
@@ -64,7 +90,7 @@ function crearNota() {
 function editNote() {
   const notes = getNoteFiles();
   if (notes.length === 0) {
-    console.log(chalk.red("No hay notas."));
+    console.log(chalk.red("No hay notas para editar."));
     return showMenu();
   }
 
@@ -77,7 +103,7 @@ function editNote() {
   rl.question("Elige nota: ", (num) => {
     const index = parseInt(num) - 1;
     if (index < 0 || index >= notes.length) {
-      console.log(chalk.red("Selección inválida."));
+      console.log(chalk.red("Selección no valida."));
       return showMenu();
     }
 
@@ -89,6 +115,7 @@ function editNote() {
     readMultilineInput((newlecontent) => {
       fs.writeFileSync(filePath, newlecontent);
       console.log(chalk.green("Nota actualizada."));
+      console.clear();
       showMenu();
     });
   });
@@ -146,3 +173,4 @@ function getNoteFiles() {
   return fs.readdirSync(NOTES_DIR).filter(file => file.endsWith(".note"));
 }
 showMenu();
+}
