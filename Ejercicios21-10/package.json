@@ -1,0 +1,32 @@
+{
+  "name": "npm-scripts",
+  "version": "1.0.0",
+  "description": "This package covers the scripts described in the exercises made on 21 oct",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "node index.js",
+    "lint": "eslint .",
+    "clear": "rm -rf node_modules && echo 'done cleaning!'",
+    "clean:env": "rm -rf .env && echo 'done cleaning env!'",
+    "copy:env": "cp .env.example .env && echo 'done copying env!'",
+    "date": "node date.js",
+    "crear": "mkdir files && echo 'files folder created!'",
+    "crear:js": "echo $1 > files/$1.js",
+    "crear:carpeta": "mkdir $1",
+    "borrar": "rm -rf files",
+    "borrar:js": "rm -rf files/*.js",
+    "imprime:azul": "node printColors.js azul",
+    "imprime:verde": "node printColors.js verde",
+    "imprime:rojo": "node printColors.js rojo"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2"
+  },
+  "devDependencies": {
+    "eslint": "9.38.0"
+  },
+  "author": "Hernan",
+  "license": "MIT"
+}
