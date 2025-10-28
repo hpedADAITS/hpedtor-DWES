@@ -1,0 +1,12 @@
+{
+  "name": "debug_vscode",
+  "version": "0.0.1",
+  "description": "Fichero de entregables de practica de debug en node y vscode",
+  "license": "MIT",
+  "author": "Hernan",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No hay tests\" && exit 1"
+  }
+}
