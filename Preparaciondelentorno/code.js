@@ -1,13 +1,14 @@
-const chalk = require('chalk');
- var youShouldNeverUseVar = "This is my very long line that eslint
-should check as an error
-...........................................";
+import chalk from "chalk";
 
- function myFunction(used, nonUsed){
- if(used){
-7 console.log(used)
-8 return
+const youShouldNeverUseVar =
+	"This is my very long line that eslint should check as an error ...........................................";
+
+function myFunction(used) {
+	if (used) {
+		console.log(used);
+		return;
+	}
+	return null;
 }
- }
 
- module.exports = nonExistingVar;
+export default youShouldNeverUseVar;
