@@ -1,0 +1,6 @@
+# Dockerfile
+ARG SONARQUBE_VERSION=10.5.1-community
+FROM sonarqube:${SONARQUBE_VERSION}
+
+
+EXPOSE 9000
