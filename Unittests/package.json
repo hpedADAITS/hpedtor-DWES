@@ -2,11 +2,12 @@
   "name": "unittests-dwes",
   "version": "1.0.0",
   "type": "module",
-  "description": "Unit testing exercises with Vitest, ESLint 9, and Prettier",
+  "description": "Unit tests and linting ",
   "scripts": {
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage",
+    "test:report": "vitest run --reporter=json",
     "test:ui": "vitest --ui",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -14,9 +15,9 @@
     "format:check": "prettier --check .",
     "sonar:start": "docker-compose up -d",
     "sonar:stop": "docker-compose down",
-    "sonar:scan": "sonar-scanner",
+    "sonar:scan": "docker run --rm --network sonarnet -v %cd%:/usr/src sonarsource/sonar-scanner-cli:latest",
     "sonar:full": "npm run test:coverage && npm run sonar:scan",
-    "clean": "rimraf coverage node_modules .nyc_output dist",
+    "clean": "rm -rf coverage node_modules .nyc_output dist",
     "check": "npm run lint && npm run format:check && npm run test:coverage"
   },
   "devDependencies": {
@@ -28,13 +29,6 @@
     "prettier": "^3.2.5",
     "vitest": "^2.1.0"
   },
-  "keywords": [
-    "testing",
-    "vitest",
-    "eslint",
-    "prettier",
-    "tdd"
-  ],
   "author": "",
-  "license": "ISC"
+  "license": "MIT"
 }
