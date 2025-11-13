@@ -14,6 +14,18 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
+app.post('/', (req, res) => {
+    res.send('Got POST request');
+});
+
+app.put('/user', (req, res) => {
+    res.send('Got PUT request by /user');
+});
+
+app.delete('/user', (req, res) => {
+    res.send('Got DELETE request by /user');
+});
+
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`listening at http://localhost:${port}`);
 });
