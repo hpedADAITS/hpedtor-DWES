@@ -1,0 +1,34 @@
+{
+  "name": "note-edit",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Basic CLI editing of documents using JS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.cjs",
+    "leer": "node index.cjs --read",
+    "crear": "node ./scripts/crear.cjs",
+    "date": "node ./scripts/date.cjs",
+    "crear:js": "node ./scripts/crear-js.cjs",
+    "crear:carpeta": "node ./scripts/crear-carpeta.cjs",
+    "borrar": "node ./scripts/borrar.cjs",
+    "borrar:js": "node ./scripts/borrar-js.cjs",
+    "imprime:azul": "node ./scripts/imprime.cjs azul",
+    "imprime:rojo": "node ./scripts/imprime.cjs rojo",
+    "imprime:verde": "node ./scripts/imprime.cjs verde",
+    "note:create": "node index.cjs --create",
+    "note:read": "node index.cjs --readnote",
+    "note:edit": "node index.cjs --edit",
+    "note:delete": "node index.cjs --delete"
+  },
+  "keywords": [
+    "CLI"
+  ],
+  "author": "Hernan",
+  "license": "MIT",
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "chalk": "^4.1.2"
+  }
+}
