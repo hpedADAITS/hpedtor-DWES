@@ -1,12 +1,13 @@
 {
   "name": "note-edit",
   "version": "0.0.1",
-  "type": "module",
+
   "description": "Basic CLI editing of documents using JS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.cjs",
+    "start": "node index.js",
+    "dev": "node index.js",
     "leer": "node index.cjs --read",
     "crear": "node ./scripts/crear.cjs",
     "date": "node ./scripts/date.cjs",
@@ -20,7 +21,8 @@
     "note:create": "node index.cjs --create",
     "note:read": "node index.cjs --readnote",
     "note:edit": "node index.cjs --edit",
-    "note:delete": "node index.cjs --delete"
+    "note:delete": "node index.cjs --delete",
+    "note:token": "node ./scripts/gentoken.cjs"
   },
   "keywords": [
     "CLI"
@@ -29,6 +31,11 @@
   "license": "MIT",
   "dependencies": {
     "blessed": "^0.1.81",
-    "chalk": "^4.1.2"
+    "chalk": "^4.1.2",
+    "cors": "^2.8.5",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "dotenv": "^17.2.3"
   }
 }
