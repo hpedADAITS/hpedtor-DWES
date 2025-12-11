@@ -1,0 +1,21 @@
+{
+  "name": "api-files",
+  "version": "1.0.0",
+  "description": "API for file upload and download using Express and Multer",
+  "main": "app.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": ["express", "multer", "upload", "download"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "archiver": "^6.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

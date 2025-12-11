@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>API de Archivos</title>
+  </head>
+  <body>
+    <h1>archivos</h1>
+
+    <hr />
+
+    <h2>subir 1</h2>
+    <input type="file" id="file" />
+    <button onclick="subirArchivo()">subir</button>
+
+    <hr />
+
+    <h2>subir multiples</h2>
+    <input type="file" id="files" multiple />
+    <button onclick="subirMultiples()">subir</button>
+
+    <hr />
+
+    <h2>listar</h2>
+    <button onclick="listarArchivos()">listar</button>
+    <div id="lista"></div>
+
+    <hr />
+
+    <h2>descargar multiples</h2>
+    <textarea id="filenames" rows="5" cols="50"></textarea>
+    <button onclick="descargarMultiples()">descargar</button>
+
+    <hr />
+
+    <h2>eliminar</h2>
+    <input type="text" id="deleteFilename" placeholder="nombre" />
+    <button onclick="eliminarArchivo()">eliminar</button>
+
+    <hr />
+
+    <script>
+      function subirArchivo() {
+        const file = document.getElementById("file").files[0];
+        if (!file) {
+          alert("sin archivo");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        fetch("/api/subir", {
+          method: "POST",
+          body: formData,
+        })
+          .then((r) => r.json())
+          .then((d) => alert(d.message || d.error))
+          .catch((e) => alert("error: " + e));
+      }
+
+      function subirMultiples() {
+        const files = document.getElementById("files").files;
+        if (files.length === 0) {
+          alert("sin archivos");
+          return;
+        }
+
+        const formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+          formData.append("files", files[i]);
+        }
+
+        fetch("/api/subir-multiples", {
+          method: "POST",
+          body: formData,
+        })
+          .then((r) => r.json())
+          .then((d) => alert(d.message || d.error))
+          .catch((e) => alert("error: " + e));
+      }
+
+      function listarArchivos() {
+        fetch("/api/archivos")
+          .then((r) => r.json())
+          .then((d) => {
+            let html = '<table border="1">';
+            html += "<tr>";
+            html +=
+              "<th>archivo</th><th>tamaño</th><th>fecha</th><th>descarga</th><th>elimina</th>";
+            html += "</tr>";
+
+            d.results.forEach((f) => {
+              let fecha = new Date(f.uploadedAt).toLocaleString("es-ES");
+              html += `<tr>`;
+              html += `<td>${f.filename}</td>`;
+              html += `<td>${f.size}b</td>`;
+              html += `<td>${fecha}</td>`;
+              html += `<td><a href="/api/descargar/${f.filename}">descarga</a></td>`;
+              html += `<td><button onclick="eliminarPor('${f.filename}')">elimina</button></td>`;
+              html += `</tr>`;
+            });
+
+            html += "</table>";
+            document.getElementById("lista").innerHTML = html;
+          })
+          .catch((e) => alert("error: " + e));
+      }
+
+      function descargarMultiples() {
+        const filenames = document
+          .getElementById("filenames")
+          .value.split("\n")
+          .filter((f) => f.trim());
+
+        fetch("/api/descargar-multiples", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filenames: filenames }),
+        })
+          .then((r) => r.blob())
+          .then((b) => {
+            const url = window.URL.createObjectURL(b);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "descarga.zip";
+            a.click();
+          })
+          .catch((e) => alert("error: " + e));
+      }
+
+      function eliminarArchivo() {
+        const filename = document.getElementById("deleteFilename").value;
+        if (!filename) {
+          alert("escribe nombre");
+          return;
+        }
+
+        fetch("/api/eliminar/" + filename, { method: "DELETE" })
+          .then((r) => r.json())
+          .then((d) => alert(d.message || d.error))
+          .catch((e) => alert("error: " + e));
+      }
+
+      function eliminarPor(filename) {
+        if (confirm("¿eliminar " + filename + "?")) {
+          fetch("/api/eliminar/" + filename, { method: "DELETE" })
+            .then((r) => r.json())
+            .then((d) => {
+              alert(d.message || d.error);
+              listarArchivos();
+            })
+            .catch((e) => alert("error: " + e));
+        }
+      }
+    </script>
+  </body>
+</html>
