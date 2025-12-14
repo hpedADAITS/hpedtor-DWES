@@ -2,6 +2,7 @@ import path from 'path';
 import { Router } from 'express';
 import usuariosRouter from './users.js';
 import notasRouter from './notas.js';
+import seguridadRouter from './seguridad.js';
 
 const router = Router();
 const raiz = process.cwd();
@@ -22,5 +23,6 @@ router.get('/error', (req, res) => {
 
 router.use('/usuarios', usuariosRouter);
 router.use('/notas', notasRouter);
+router.use('/', seguridadRouter);
 
 export default router;

@@ -4,3 +4,6 @@ export const loggerBasico = (req, res, next) => {
   logger.info(`${req.method} ${req.url}`);
   next();
 };
+
+export * from './auth.js';
+export { validarBody, validarParams } from './validacion.js';
