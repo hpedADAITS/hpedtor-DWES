@@ -1,16 +1,13 @@
 {
-  "name": "note-edit",
-  "version": "0.0.1",
+  "name": "noteedit",
+  "version": "1.0.0",
+  "description": "gestor sencillo de notas en node",
   "type": "module",
-  "description": "Basic CLI editing of documents using JS",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.cjs",
-    "leer": "node index.cjs --read",
-    "crear": "node ./scripts/crear.cjs",
-    "date": "node ./scripts/date.cjs",
-    "crear:js": "node ./scripts/crear-js.cjs",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "echo \"tests pendientes\"",
     "crear:carpeta": "node ./scripts/crear-carpeta.cjs",
     "borrar": "node ./scripts/borrar.cjs",
     "borrar:js": "node ./scripts/borrar-js.cjs",
@@ -20,15 +17,24 @@
     "note:create": "node index.cjs --create",
     "note:read": "node index.cjs --readnote",
     "note:edit": "node index.cjs --edit",
-    "note:delete": "node index.cjs --delete"
+    "note:delete": "node index.cjs --delete",
+    "test:watch": "echo \"tests pendientes\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
-  "keywords": [
+   "keywords": [
     "CLI"
   ],
   "author": "Hernan",
   "license": "MIT",
   "dependencies": {
-    "blessed": "^0.1.81",
-    "chalk": "^4.1.2"
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.32.0",
+    "nodemon": "^3.1.11"
   }
 }
