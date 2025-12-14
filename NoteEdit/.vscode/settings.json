@@ -1,0 +1,12 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/node_modules": true
+  },
+  "code-runner.runInTerminal": true,
+  "code-runner.executorMap": {
+    "javascript": "node $fullFileName"
+  },
+  "eslint.enable": true,
+  "javascript.format.enable": false
+}
