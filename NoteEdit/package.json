@@ -10,11 +10,17 @@
     "test": "echo \"tests pendientes\"",
     "test:watch": "echo \"tests pendientes\"",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "notas": "node index.cjs",
+    "notas:crear": "node index.cjs --create",
+    "notas:editar": "node index.cjs --edit",
+    "notas:eliminar": "node index.cjs --delete",
+    "notas:leer": "node index.cjs --read"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "chalk": "^4.1.2",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "helmet": "^8.1.0",
