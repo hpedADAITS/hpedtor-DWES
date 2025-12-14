@@ -5,22 +5,50 @@ import {
   obtenerNota,
   editarNota,
   borrarNotaControlador,
+  importarNotas,
+  exportarNotas,
+  exportarNotaArchivo,
 } from '../controllers/notas.js';
 import {
   validarToken,
   requerirRol,
   validarBody,
   validarParams,
+  validarQuery,
 } from '../middlewares/index.js';
 import {
   esquemaActualizarNota,
   esquemaCrearNota,
+  esquemaImportarNotas,
+  esquemaListarNotasQuery,
   esquemaNotaId,
 } from '../models/notas.js';
 
 const router = Router();
 
-router.get('/', validarToken, requerirRol(['usuario', 'admin']), obtenerNotas);
+router.get(
+  '/',
+  validarToken,
+  requerirRol(['usuario', 'admin']),
+  validarQuery(esquemaListarNotasQuery),
+  obtenerNotas,
+);
+
+router.get(
+  '/exportar',
+  validarToken,
+  requerirRol(['usuario', 'admin']),
+  validarQuery(esquemaListarNotasQuery),
+  exportarNotas,
+);
+
+router.post(
+  '/importar',
+  validarToken,
+  requerirRol(['usuario', 'admin']),
+  validarBody(esquemaImportarNotas),
+  importarNotas,
+);
 router.post(
   '/',
   validarToken,
@@ -34,6 +62,13 @@ router.get(
   requerirRol(['usuario', 'admin']),
   validarParams(esquemaNotaId),
   obtenerNota,
+);
+router.get(
+  '/:id/archivo',
+  validarToken,
+  requerirRol(['usuario', 'admin']),
+  validarParams(esquemaNotaId),
+  exportarNotaArchivo,
 );
 router.put(
   '/:id',

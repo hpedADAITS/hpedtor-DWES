@@ -1,35 +1,42 @@
-const notasMemoria = [];
+import config from '../config.js';
+import {
+  listarNotasMemoria,
+  crearNotaMemoria,
+  buscarNotaMemoria,
+  actualizarNotaMemoria,
+  borrarNotaMemoria,
+  limpiarNotasMemoria,
+} from './notasMemoria.js';
+import {
+  listarNotasMongo,
+  crearNotaMongo,
+  buscarNotaMongo,
+  actualizarNotaMongo,
+  borrarNotaMongo,
+} from './notasMongo.js';
 
-const generarId = () => `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
+const usarMongo = () => Boolean(config.mongoHabilitado);
 
-export const listarNotasRepo = () => notasMemoria;
+export const listarNotasRepo = async () => (
+  usarMongo() ? listarNotasMongo() : listarNotasMemoria()
+);
 
-export const crearNotaRepo = ({ titulo, contenido = '' }) => {
-  const nueva = {
-    id: generarId(),
-    titulo,
-    contenido,
-    creadaEn: new Date().toISOString(),
-    actualizadaEn: new Date().toISOString(),
-  };
-  notasMemoria.push(nueva);
-  return nueva;
-};
+export const crearNotaRepo = async (payload) => (
+  usarMongo() ? crearNotaMongo(payload) : crearNotaMemoria(payload)
+);
 
-export const buscarNotaRepo = (id) => notasMemoria.find((nota) => nota.id === id);
+export const buscarNotaRepo = async (id) => (
+  usarMongo() ? buscarNotaMongo(id) : buscarNotaMemoria(id)
+);
 
-export const actualizarNotaRepo = (id, cambios) => {
-  const nota = notasMemoria.find((item) => item.id === id);
-  if (!nota) return null;
-  if (cambios.titulo) nota.titulo = cambios.titulo;
-  if (cambios.contenido) nota.contenido = cambios.contenido;
-  nota.actualizadaEn = new Date().toISOString();
-  return nota;
-};
+export const actualizarNotaRepo = async (id, cambios) => (
+  usarMongo() ? actualizarNotaMongo(id, cambios) : actualizarNotaMemoria(id, cambios)
+);
 
-export const borrarNotaRepo = (id) => {
-  const indice = notasMemoria.findIndex((item) => item.id === id);
-  if (indice === -1) return false;
-  notasMemoria.splice(indice, 1);
-  return true;
+export const borrarNotaRepo = async (id) => (
+  usarMongo() ? borrarNotaMongo(id) : borrarNotaMemoria(id)
+);
+
+export const limpiarNotasRepo = () => {
+  if (!usarMongo()) limpiarNotasMemoria();
 };

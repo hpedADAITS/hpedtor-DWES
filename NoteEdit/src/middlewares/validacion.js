@@ -31,3 +31,13 @@ export const validarParams = (schema) => (req, res, next) => {
     return manejarError(err, res);
   }
 };
+
+export const validarQuery = (schema) => (req, res, next) => {
+  try {
+    const limpio = schema.parse(req.query || {});
+    req.query = limpio;
+    return next();
+  } catch (err) {
+    return manejarError(err, res);
+  }
+};
