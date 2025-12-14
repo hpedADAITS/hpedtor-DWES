@@ -13,7 +13,6 @@ export const obtenerNotas = (req, res) => {
 
 export const crearNota = (req, res) => {
   const { titulo, contenido } = req.body || {};
-  if (!titulo) return res.status(400).json({ mensaje: 'titulo requerido' });
   const nueva = crearNotaNueva({ titulo, contenido: contenido || '' });
   return res.status(201).json({ datos: nueva });
 };
@@ -28,9 +27,6 @@ export const obtenerNota = (req, res) => {
 export const editarNota = (req, res) => {
   const { id } = req.params;
   const { titulo, contenido } = req.body || {};
-  if (!titulo && !contenido) {
-    return res.status(400).json({ mensaje: 'nada para actualizar' });
-  }
   const nota = actualizarNota(id, { titulo, contenido });
   if (!nota) return res.status(404).json({ mensaje: 'nota no encontrada' });
   return res.json({ datos: nota });

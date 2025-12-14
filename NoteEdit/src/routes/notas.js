@@ -6,8 +6,17 @@ import {
   editarNota,
   borrarNotaControlador,
 } from '../controllers/notas.js';
-import { validarToken, requerirRol, validarBody, validarParams } from '../middlewares/index.js';
-import { esquemaActualizarNota, esquemaCrearNota, esquemaNotaId } from '../models/notas.js';
+import {
+  validarToken,
+  requerirRol,
+  validarBody,
+  validarParams,
+} from '../middlewares/index.js';
+import {
+  esquemaActualizarNota,
+  esquemaCrearNota,
+  esquemaNotaId,
+} from '../models/notas.js';
 
 const router = Router();
 
