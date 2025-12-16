@@ -1,0 +1,57 @@
+name: sonar
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sonar:
+    runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: dependencias
+        run: npm ci
+
+      - name: tests + cobertura
+        run: npm run test:coverage
+
+      - name: requisito elasticsearch
+        run: sudo sysctl -w vm.max_map_count=262144
+
+      - name: levantar sonarqube
+        run: docker compose -p noteedit_sonar_ci -f docker-compose.sonarqube.yml up -d sonar_db sonarqube
+
+      - name: esperar sonarqube
+        run: |
+          set -e
+          for i in $(seq 1 120); do
+            if curl -fsS "http://localhost:9001/api/system/status" | grep -q '"status":"UP"'; then
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "sonarqube no ha arrancado a tiempo" >&2
+          exit 1
+
+      - name: scan
+        run: |
+          if [ -z "$SONAR_TOKEN" ]; then
+            echo "falta SONAR_TOKEN en secrets" >&2
+            exit 2
+          fi
+          export SONAR_HOST_URL="${SONAR_HOST_URL:-http://localhost:9001}"
+          npm run sonar:scan
+
+      - name: parar sonarqube
+        if: always()
+        run: docker compose -p noteedit_sonar_ci -f docker-compose.sonarqube.yml down -v

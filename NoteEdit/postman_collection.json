@@ -1,0 +1,262 @@
+{
+  "info": {
+    "name": "NoteEdit API",
+    "_postman_id": "b4d650d7-6f7f-4d86-8d41-5a6a22f85f6e",
+    "description": "Colección para probar NoteEdit (roles + token bcrypt) y endpoints de notas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    {
+      "key": "token",
+      "value": "$2b$10$CC3K1HEkJSqtnoh62NqXqebWBLFy4VhbVoWWTsARzXXOjpnVu5tWa"
+    },
+    { "key": "rolUsuario", "value": "usuario" },
+    { "key": "rolAdmin", "value": "admin" },
+    { "key": "adminUsuario", "value": "admin" },
+    { "key": "notaId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Sistema",
+      "item": [
+        {
+          "name": "GET /ping",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/ping", "host": ["{{baseUrl}}"], "path": ["ping"] }
+          }
+        },
+        {
+          "name": "GET /page",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/page", "host": ["{{baseUrl}}"], "path": ["page"] }
+          }
+        },
+        {
+          "name": "GET /error (404 html)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/error", "host": ["{{baseUrl}}"], "path": ["error"] }
+          }
+        },
+        {
+           "name": "GET /hora (WorldTimeAPI)",
+           "request": {
+             "method": "GET",
+             "url": { "raw": "{{baseUrl}}/hora", "host": ["{{baseUrl}}"], "path": ["hora"] }
+           }
+         }
+      ]
+    },
+    {
+      "name": "Seguridad",
+      "item": [
+        {
+          "name": "GET /public",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/public", "host": ["{{baseUrl}}"], "path": ["public"] }
+          }
+        },
+        {
+          "name": "GET /vip (ok usuario)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "x-rol", "value": "{{rolUsuario}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/vip", "host": ["{{baseUrl}}"], "path": ["vip"] }
+          }
+        },
+        {
+          "name": "GET /vip (401 sin rol)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/vip", "host": ["{{baseUrl}}"], "path": ["vip"] }
+          }
+        },
+        {
+          "name": "GET /admin (ok admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "x-rol", "value": "{{rolAdmin}}" },
+              { "key": "x-usuario", "value": "{{adminUsuario}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/admin", "host": ["{{baseUrl}}"], "path": ["admin"] }
+          }
+        },
+        {
+          "name": "GET /admin (403 usuario no admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "x-rol", "value": "{{rolAdmin}}" },
+              { "key": "x-usuario", "value": "otro" }
+            ],
+            "url": { "raw": "{{baseUrl}}/admin", "host": ["{{baseUrl}}"], "path": ["admin"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "GET /usuarios",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/usuarios", "host": ["{{baseUrl}}"], "path": ["usuarios"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notas",
+      "item": [
+        {
+          "name": "GET /notas (ok)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "x-rol", "value": "{{rolUsuario}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notas?page=1&limit=10&sort=actualizadaEn&order=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["notas"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "sort", "value": "actualizadaEn" },
+                { "key": "order", "value": "desc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /notas (401 sin token)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/notas", "host": ["{{baseUrl}}"], "path": ["notas"] }
+          }
+        },
+        {
+          "name": "POST /notas (crear y guardar notaId)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 201', function () { pm.response.to.have.status(201); });",
+                  "var json = pm.response.json();",
+                  "if (json && json.datos && json.datos.id) { pm.collectionVariables.set('notaId', json.datos.id); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "x-rol", "value": "{{rolUsuario}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"nota postman\",\n  \"contenido\": \"texto de ejemplo\",\n  \"categoria\": \"general\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/notas", "host": ["{{baseUrl}}"], "path": ["notas"] }
+          }
+        },
+        {
+          "name": "GET /notas/:id (ok)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "x-rol", "value": "{{rolUsuario}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/notas/{{notaId}}", "host": ["{{baseUrl}}"], "path": ["notas", "{{notaId}}"] }
+          }
+        },
+        {
+          "name": "PUT /notas/:id (ok)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "x-rol", "value": "{{rolUsuario}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"titulo\": \"nota editada postman\"\n}" },
+            "url": { "raw": "{{baseUrl}}/notas/{{notaId}}", "host": ["{{baseUrl}}"], "path": ["notas", "{{notaId}}"] }
+          }
+        },
+        {
+          "name": "GET /notas/:id/archivo (descarga .note)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "x-rol", "value": "{{rolUsuario}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/notas/{{notaId}}/archivo",
+              "host": ["{{baseUrl}}"],
+              "path": ["notas", "{{notaId}}", "archivo"]
+            }
+          }
+        },
+        {
+          "name": "GET /notas/exportar (ok)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "x-rol", "value": "{{rolUsuario}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/notas/exportar", "host": ["{{baseUrl}}"], "path": ["notas", "exportar"] }
+          }
+        },
+        {
+          "name": "POST /notas/importar (ok)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "x-rol", "value": "{{rolUsuario}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"archivos\": [\n    { \"nombre\": \"importada 1\", \"contenido\": \"hola\" },\n    { \"nombre\": \"importada 2\", \"contenido\": \"mundo\", \"categoria\": \"demo\" }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/notas/importar", "host": ["{{baseUrl}}"], "path": ["notas", "importar"] }
+          }
+        },
+        {
+          "name": "DELETE /notas/:id (ok admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "x-rol", "value": "{{rolAdmin}}" },
+              { "key": "x-usuario", "value": "{{adminUsuario}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/notas/{{notaId}}", "host": ["{{baseUrl}}"], "path": ["notas", "{{notaId}}"] }
+          }
+        }
+      ]
+    }
+  ]
+}
+

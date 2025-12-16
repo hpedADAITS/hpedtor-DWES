@@ -9,6 +9,20 @@ services:
       MONGO_INITDB_DATABASE: noteedit
     volumes:
       - mongo_noteedit:/data/db
+  app:
+    build: .
+    container_name: noteedit_app
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+      NODE_ENV: development
+      ADMIN_USER: admin
+      MONGO_URI: mongodb://mongodb:27017/noteedit
+      MONGO_ENABLED: "true"
 
 volumes:
   mongo_noteedit:

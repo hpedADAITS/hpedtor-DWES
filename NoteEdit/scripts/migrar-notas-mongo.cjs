@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const mongoose = require('mongoose');
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/noteedit';
 const notasDir = process.env.NOTAS_DIR || path.join(process.cwd(), 'notes');

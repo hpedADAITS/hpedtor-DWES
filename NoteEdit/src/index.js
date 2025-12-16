@@ -1,11 +1,10 @@
-import app from './app.js';
-import config from './config.js';
-import { logger } from './utils/index.js';
-import { conectarMongo } from './loaders/mongo.js';
+import config from './core/config/index.js';
+import { logger } from './core/utils/index.js';
+import { iniciarSistema } from './core/loaders/index.js';
 
 const { puerto } = config;
 
-await conectarMongo();
+const { app } = await iniciarSistema();
 
 app.listen(puerto, () => {
   logger.info(`servidor de notas escuchando en puerto ${puerto}`);
